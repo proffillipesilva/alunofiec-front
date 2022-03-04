@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import Aluno from './Aluno'
 import Home from './Home'
+import AlunoForm from './AlunoForm'
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
 
   return (
     <div className="container">
+      <AlunoForm />
       <Home> 
         {alunos != null ? alunos.map(aluno => 
         <Aluno nome={aluno.nome}  curso={aluno.curso}  
