@@ -1,4 +1,5 @@
-import React, {useState, useReducer} from 'react'
+import React, {useState, useReducer, useEffect} from 'react'
+import {useParams} from 'react-router-dom'
 
 const formReducer = (state, action) => {
   switch(action.type){
@@ -7,6 +8,8 @@ const formReducer = (state, action) => {
         ...state,
         [action.name]: action.value
       }
+    case 'INICIALIZA_CAMPOS':
+      return { ...action.state }
     default:
       return state;
   }
@@ -22,17 +25,44 @@ const AlunoForm = () => {
         })
         
     }
+    const { id } = useParams();
+
+    
+    useEffect(() => {
+      if(id != null){
+        fetch("http://localhost:8080/alunos/" + id)
+        .then(response => response.json())
+        .then(data => {
+          dispatch({
+            type: 'INICIALIZA_CAMPOS',
+            state: data
+          })
+        })
+      }
+    }, [])
 
     const submitForm = (e) => {
-      const url = "http://localhost:8080/alunos"
+      let url = "http://localhost:8080/alunos"
       e.preventDefault();
       console.log(formState)
-      fetch(url, {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(formState)
-      }).then(response => response.json())
-      .then(data => alert("Dados enviados com sucesso"));
+
+      if(id!= null){
+        url += "/" + id;
+        fetch(url, {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(formState)
+        }).then(response => response.json())
+        .then(data => alert("Dados enviados com sucesso"));
+
+      } else {
+        fetch(url, {
+          method: 'POST',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(formState)
+        }).then(response => response.json())
+        .then(data => alert("Dados enviados com sucesso"));
+      }
     }
 
     return (

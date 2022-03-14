@@ -2,50 +2,30 @@ import React, {useState} from 'react'
 import Aluno from './Aluno'
 import Home from './Home'
 import AlunoForm from './AlunoForm'
+import Alunos from './Alunos'
+import Header from './Header'
+import { Routes, Route, Outlet } from 'react-router'
+import EditAlunos from './EditAlunos'
 
 
 const App = () => {
-  const var1 = "loga" // nao pode alterar mais
-  let var2 = "kiro"  // alterar de novo
 
- 
-  const url = "http://localhost:8080/alunos/exemplo";
-  const alunosUrl = "http://localhost:8080/alunos";
-  
-  const [aluno, setaluno] = useState(null)
-  const [alunos, setalunos] = useState(null)
-  
-  const baixaaluno = () => {
-    fetch(url)
-    .then(response => response.json())
-    .then(data => setaluno(data))
-  }
-
-  const baixaalunos = () => {
-    fetch(alunosUrl)
-    .then(response => response.json())
-    .then(data => setalunos(data))
-  }
 
   return (
-    <div className="container">
-      <AlunoForm />
-      <Home> 
-        {alunos != null ? alunos.map(aluno => 
-        <Aluno nome={aluno.nome}  curso={aluno.curso}  
-         profileImage={aluno.profileImage}  />
-         ) : 
-         null}
-
-
-      </Home>
-      {aluno != null ? <Aluno nome={aluno.nome}
-       curso={aluno.curso} 
-       profileImage={aluno.profileImage} 
-       /> : null}
-      <button onClick={baixaaluno} >Carregar aluno</button>
-      <button onClick={baixaalunos} >Carregar todos os alunos</button>
-    </div>
+    <>
+    <header>
+      <Header />
+    </header>
+    <main className="container">
+      <Routes>
+        <Route index element={<EditAlunos />} />
+        <Route path="/alunos" element={<Alunos />} />
+        <Route path="/criar"  element={<AlunoForm />} />
+        <Route path="/editar/:id"  element={<AlunoForm />} />
+      </Routes>
+      <Outlet />
+    </main>
+    </>
   )
 }
 
