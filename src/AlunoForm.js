@@ -1,4 +1,5 @@
-import React, {useState, useReducer} from 'react'
+import React, {useState, useEffect, useReducer} from 'react'
+import { useParams } from 'react-router-dom'
 
 const formReducer = (state, action) => {
   switch(action.type){
@@ -7,13 +8,36 @@ const formReducer = (state, action) => {
         ...state,
         [action.name]: action.value
       }
+    case 'INITIALIZE':
+      return {
+        ...action.state
+      }
     default:
       return state;
   }
 }
 const AlunoForm = () => {
+
+  const alunosUrl = "http://localhost:8080/alunos";
     const initialState = { rm: "", nome: "",  curso: "",  profileImage: "" }
     const [formState, dispatch] = useReducer(formReducer, initialState);
+    const [file, setfile] = useState();
+
+    
+    const { id }  = useParams();
+    useEffect(() =>{
+      if(id != null && id.trim() !== ""){
+      fetch(alunosUrl + "/" + id)
+      .then(response => response.json())
+      .then(data => 
+        dispatch({
+          type: 'INITIALIZE',
+          state:  data
+        }))
+      }
+    
+    }, [id])
+
     const handleChange = (e) => {
         dispatch({
           type: 'ATUALIZA',
@@ -23,14 +47,19 @@ const AlunoForm = () => {
         
     }
 
+    const handleImageChange = e => {
+      setfile(e.target.files[0]);
+    }
+
     const submitForm = (e) => {
-      const url = "http://localhost:8080/alunos"
+      const url = "http://localhost:8080/alunos/withPhoto"
       e.preventDefault();
-      console.log(formState)
+      const formData = new FormData();
+      formData.append("aluno", JSON.stringify(formState));
+      formData.append("photo", file);
       fetch(url, {
         method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(formState)
+        body: formData
       }).then(response => response.json())
       .then(data => alert("Dados enviados com sucesso"));
     }
@@ -61,9 +90,9 @@ const AlunoForm = () => {
                 </div>
                 <div className="form-group">
                   <label for="profileImage">Imagem</label>
-                  <input type="text" onChange={handleChange}
+                  <input type="file" onChange={handleImageChange}
                     className="form-control" name="profileImage" id="profileImage" aria-describedby="helpId" placeholder=""
-                     value={formState.profileImage} />
+                     />
                   <small id="helpId" className="form-text text-muted">Coloque a Imagem do aluno</small>
                 </div>
                <button type="submit" onClick={submitForm} className="btn btn-primary">Submit</button> 
