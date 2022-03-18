@@ -17,6 +17,7 @@ const formReducer = (state, action) => {
 const AlunoForm = () => {
     const initialState = { rm: "", nome: "",  curso: "",  profileImage: "" }
     const [formState, dispatch] = useReducer(formReducer, initialState);
+    const [file, setfile] = useState(initialState)
     const handleChange = (e) => {
         dispatch({
           type: 'ATUALIZA',
@@ -26,6 +27,10 @@ const AlunoForm = () => {
         
     }
     const { id } = useParams();
+
+    const handleImageChange = (e) => {
+      setfile(e.target.files[0])
+    }
 
     
     useEffect(() => {
@@ -56,10 +61,12 @@ const AlunoForm = () => {
         .then(data => alert("Dados enviados com sucesso"));
 
       } else {
-        fetch(url, {
+        const formData = new FormData();
+        formData.append("aluno", JSON.stringify(formState));
+        formData.append("foto", file);
+        fetch(url + "/comFoto", {
           method: 'POST',
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(formState)
+          body: formData
         }).then(response => response.json())
         .then(data => alert("Dados enviados com sucesso"));
       }
@@ -91,9 +98,9 @@ const AlunoForm = () => {
                 </div>
                 <div className="form-group">
                   <label for="profileImage">Imagem</label>
-                  <input type="text" onChange={handleChange}
+                  <input type="file" onChange={handleImageChange}
                     className="form-control" name="profileImage" id="profileImage" aria-describedby="helpId" placeholder=""
-                     value={formState.profileImage} />
+                     />
                   <small id="helpId" className="form-text text-muted">Coloque a Imagem do aluno</small>
                 </div>
                <button type="submit" onClick={submitForm} className="btn btn-primary">Submit</button> 

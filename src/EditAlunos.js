@@ -10,6 +10,15 @@ const EditAlunos = () => {
         .then(data => setalunos(data));
     }
 
+    const deletaAluno = (id) => {
+        fetch("http://localhost:8080/alunos/" + id, {
+            method: "DELETE"
+        }).then(response => {
+            baixaAlunos();
+        });
+        
+    }
+
     // A lista vazia marca que o que estiver dentro do useEffect vai executar quando a página acabar de montar
     useEffect(() => {
         baixaAlunos();
@@ -34,7 +43,7 @@ const EditAlunos = () => {
                     <td>{aluno.nome}</td>
                     <td>{aluno.curso}</td>
                     <td><Link to={"/editar/"+ aluno.id}>Edit</Link></td>
-                    <td>Deletar</td>
+                    <td><a name="" id="" onClick={() => deletaAluno(aluno.id)} class="btn btn-danger" href="#" role="button">x</a></td>
                 </tr>
             )) : null}
             </tbody>
