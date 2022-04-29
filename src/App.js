@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/editar/:id"  element={<AlunoForm />} />
       </Routes>
       <Outlet />
-    </main>
+    </main> 
     </>
   )
 }
