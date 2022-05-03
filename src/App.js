@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Aluno from './Aluno'
 import Home from './Home'
 import AlunoForm from './AlunoForm'
@@ -9,9 +9,17 @@ import EditAlunos from './EditAlunos'
 import Login from './Login'
 
 import {useSelector } from 'react-redux'
+import { requestForToken } from './firebase'
+
+
 
 
 const App = () => {
+
+  const [token, setToken] = useState(null);
+  const [isTokenFound, setTokenFound] = useState(false);
+
+  requestForToken(setTokenFound, setToken)
 
   const loggedIn = useSelector(state => state.loggedIn)
 
@@ -30,7 +38,7 @@ const App = () => {
         <Route path="/editar/:id"  element={<AlunoForm />} />
         </>
         : 
-        <Route path="/*"  element={<Login />} />
+        <Route path="/*"  element={<Login token={token} />} />
         }
       </Routes>
       <Outlet />

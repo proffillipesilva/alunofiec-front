@@ -5,21 +5,22 @@ import { reduxLogin } from './actions';
 import { useDispatch } from 'react-redux';
 
 
-const Login = () => {
+const Login = (props) => {
 
  const dispatch = useDispatch();
 
 const responseGoogle = async (response) => {
   console.log(response)
   const googleToken = response.tokenId;
-  dispatch(await reduxLogin({googleToken}));
-
+  const fcmToken = props.token;
+  dispatch(await reduxLogin({googleToken, fcmToken}));
+  
   
 }
 
 return(
   <GoogleLogin
-    clientId="seuClientId"
+    clientId="277380091468-1pe2je91eas7almtof0bf0bfhmehbvgi.apps.googleusercontent.com"
     render={renderProps => (
         <div className='container' style={{display: "flex", alignItems: 'center', justifyContent: 'normal', height: '100vh'}}>
 
