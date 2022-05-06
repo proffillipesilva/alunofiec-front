@@ -1,5 +1,7 @@
 import React, {useState, useReducer, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
+import myaxios from './myaxios'
+
 
 const formReducer = (state, action) => {
   switch(action.type){
@@ -15,7 +17,7 @@ const formReducer = (state, action) => {
   }
 }
 const AlunoForm = () => {
-    const initialState = { rm: "", nome: "",  curso: "",  profileImage: "" }
+    const initialState = { email: "", rm: "", nome: "",  curso: "",  profileImage: "" }
     const [formState, dispatch] = useReducer(formReducer, initialState);
     const [file, setfile] = useState(initialState)
     const handleChange = (e) => {
@@ -35,12 +37,12 @@ const AlunoForm = () => {
     
     useEffect(() => {
       if(id != null){
-        fetch("http://localhost:8080/alunos/" + id)
-        .then(response => response.json())
-        .then(data => {
+        myaxios.put("http://localhost:8080/alunos/" + id)
+        
+        .then(res => {
           dispatch({
             type: 'INICIALIZA_CAMPOS',
-            state: data
+            state: res.data
           })
         })
       }
@@ -53,28 +55,28 @@ const AlunoForm = () => {
 
       if(id!= null){
         url += "/" + id;
-        fetch(url, {
-          method: 'PUT',
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(formState)
-        }).then(response => response.json())
-        .then(data => alert("Dados enviados com sucesso"));
+        myaxios.put(url, formState)
+        .then(res => alert("Dados enviados com sucesso"));
 
       } else {
         const formData = new FormData();
         formData.append("aluno", JSON.stringify(formState));
         formData.append("foto", file);
-        fetch(url + "/comFoto", {
-          method: 'POST',
-          body: formData
-        }).then(response => response.json())
-        .then(data => alert("Dados enviados com sucesso"));
+        myaxios.post(url + "/comFoto", formData)
+        .then(res => alert("Dados enviados com sucesso"));
       }
     }
 
     return (
         <div className="container">
             <form>
+            <div className="form-group">
+                  <label for="email">Email</label>
+                  <input type="text" onChange={handleChange}
+                    className="form-control" name="email" id="email" aria-describedby="helpId" placeholder="" 
+                    value={formState.email} />
+                  <small id="helpId" className="form-text text-muted">Coloque o Email do aluno</small>
+                </div>
                 <div className="form-group">
                   <label for="rm">RM</label>
                   <input type="number" onChange={handleChange}
