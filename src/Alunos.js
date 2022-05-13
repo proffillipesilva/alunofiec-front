@@ -40,7 +40,7 @@ const Alunos = () => {
                 curso={aluno.curso}
                 profileImage={aluno.profileImage}  />
             )) : "Nenhum aluno encontrado" }
-<Pagination>
+            <Pagination>
             {items}
             </Pagination>
         </div>
