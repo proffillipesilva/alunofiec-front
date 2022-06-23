@@ -12,7 +12,6 @@ import reduxThunk from 'redux-thunk'
 import reducer from './reducers';
 
 const middleWare = applyMiddleware(reduxThunk);
-
 const store = createStore(reducer, middleWare)
 
 const renderReacDom = () => { ReactDOM.render(
