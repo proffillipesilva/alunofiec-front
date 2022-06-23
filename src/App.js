@@ -25,13 +25,13 @@ const App = () => {
 
   return (
     <>
-    <header>
-      <Header />
-    </header>
     <main className="container">
       <Routes>
         {loggedIn ? 
         <>
+        <header>
+          <Header />
+        </header>
         <Route index element={<EditAlunos />} />
         <Route path="/alunos" element={<Alunos />} />
         <Route path="/criar"  element={<AlunoForm />} />
