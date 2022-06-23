@@ -4,7 +4,7 @@ const HOST = process.env.MYSERVER_IP || "http://localhost";
 const PORT = process.env.MYSERVER_PORT || "8080"; 
 
 const myaxios = axios.create({
-    baseURL: HOST + "/" + PORT;
+    baseURL: HOST + ":" + PORT;
 })
 
 myaxios.interceptors.request.use((config) => {
