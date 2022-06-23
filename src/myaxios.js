@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const HOST = process.env.MYSERVER_IP || "http://localhost";
-const PORT = process.env.MYSERVER_PORT || "8080"; 
+const HOST = process.env.REACT_APP_MYSERVER_IP || "http://localhost";
+const PORT = process.env.REACT_APP_MYSERVER_PORT || "8080"; 
 
 const myaxios = axios.create({
     baseURL: HOST + ":" + PORT
