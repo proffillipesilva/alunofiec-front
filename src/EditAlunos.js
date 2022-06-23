@@ -1,19 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
+import myaxios from './myaxios'
 
 const EditAlunos = () => {
     const [alunos, setalunos] = useState(null);
 
     const baixaAlunos = () => {
-        fetch("http://localhost:8080/alunos")
-        .then(response => response.json())
-        .then(data => setalunos(data));
+        myaxios.get("http://localhost:8080/alunos")
+        .then(response => setalunos(response.data));
     }
 
     const deletaAluno = (id) => {
-        fetch("http://localhost:8080/alunos/" + id, {
-            method: "DELETE"
-        }).then(response => {
+        myaxios.delete("http://localhost:8080/alunos/" + id)
+        .then(response => {
             baixaAlunos();
         });
         
