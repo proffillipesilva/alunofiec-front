@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const HOST = process.env.REACT_APP_MYSERVER_IP || "http://localhost";
-const PORT = process.env.REACT_APP_MYSERVER_PORT || "8080"; 
+const HOST = process.env.REACT_APP_MYSERVER_HOST || "http://localhost:8080";
 
 const myaxios = axios.create({
-    baseURL: HOST + ":" + PORT
+    baseURL: HOST
 })
 
 myaxios.interceptors.request.use((config) => {
